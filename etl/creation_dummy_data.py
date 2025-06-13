@@ -4,26 +4,44 @@ import json
 import pyarrow as pa
 import pyarrow.parquet as pq
 import xml.etree.ElementTree as ET
+from pathlib import Path
 
 # Directory setup
-data_dir = "../data/input"
+current_path = Path(__file__).resolve()
+root_path = current_path.parent.parent
+data_dir = os.path.join(root_path, "data", "input")
 os.makedirs(data_dir, exist_ok=True)
 
 # 1. products.csv
 products_df = pd.DataFrame({
     "product_id": [101, 102, 103],
     "name": ["Widget", "Gadget", "Doohickey"],
-    "price": [19.99, 29.99, 9.99]
+    "price": [19.99, 29.99, 9.99],
+    "release_date": ['01/01/2023', "09/05/2023", '11/10/2023']
 })
 products_df.to_csv(f"{data_dir}/products.csv", index=False)
 
 # 2. users.xlsx
-users_df = pd.DataFrame({
+users_df_1 = pd.DataFrame({
     "id": [1, 2, 3],
     "email": ["alice@example.com", "bob@example.com", "carol@example.com"],
     "signup_date": ["2023-01-01", "2023-02-15", "2023-03-10"]
 })
-users_df.to_excel(f"{data_dir}/users.xlsx", index=False)
+# users_df_1.to_excel(f"{data_dir}/users.xlsx", sheet_name='Sheet1', index=False)
+
+users_df_2 = pd.DataFrame({
+    "id": [4, 5, 6],
+    "email": ["norman@example.com", "greg@example.com", "ariel@example.com"],
+    "signup_date": ["2023-05-11", "2023-07-1", "2023-01-1"]
+})
+# users_df_2.to_excel(f"{data_dir}/users.xlsx", sheet_name='Sheet2', index=False)
+
+with pd.ExcelWriter(f"{data_dir}/users.xlsx") as writer:
+    # Saving first DataFrame to Sheet1
+    users_df_1.to_excel(writer, sheet_name='Sheet1', index=False)
+    
+    # Saving second DataFrame to Sheet2
+    users_df_2.to_excel(writer, sheet_name='Sheet2', index=False)
 
 # 3. orders.json
 orders_data = [
