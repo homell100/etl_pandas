@@ -73,7 +73,7 @@ class TestExtractExcelFunctions():
     test_path = "test_path_excel.xslx"
 
     @patch("etl.extract.pd.read_excel", return_value=mock_dfs)
-    def test_read_products_csv_success(self, mock_read_excel):
+    def test_read_products_excel_success(self, mock_read_excel):
         """Test read_products_csv response"""
         df = read_users_excel(self.test_path)
         pd.testing.assert_frame_equal(df, self.expected_df)
@@ -83,3 +83,15 @@ class TestExtractExcelFunctions():
             parse_dates=["signup_date"],
             dtype=self.expected_data_types
         )
+
+    @patch("etl.extract.pd.read_excel", side_effect=FileNotFoundError)
+    def test_read_products_excel_fail_file_not_found(self, mock_read_csv):
+        """Test read_products_csv response"""
+        df = read_users_excel(self.test_path)
+        mock_read_csv.assert_called_once_with(
+            self.test_path,
+            sheet_name=[0,1],
+            parse_dates=["signup_date"],
+            dtype=self.expected_data_types
+        )
+        assert df is None
