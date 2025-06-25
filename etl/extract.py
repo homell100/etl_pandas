@@ -34,7 +34,6 @@ def read_users_excel(file_path=f"{data_dir}/users.csv"):
                                     sheet_name=[0,1],
                                     parse_dates=["signup_date"],
                                     dtype=data_types)
-        print(excel_dfs)
         return pd.concat(excel_dfs.values(), ignore_index=True)
     except FileNotFoundError as e:
         print(f"Excel file not found in {file_path}")
