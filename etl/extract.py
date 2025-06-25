@@ -24,9 +24,14 @@ def read_products_csv(file_path=f"{data_dir}/products.csv"):
     return None
     
 
-def read_users_excel():
-    excel_dfs = pd.read_excel(f"{data_dir}/users.xlsx", sheet_name=[0,1])
-    return pd.concat(excel_dfs.values())
+def read_users_excel(file_path=f"{data_dir}/users.csv"):
+    
+    try:
+        excel_dfs = pd.read_excel(f"{data_dir}/users.xlsx", sheet_name=[0,1])
+        return pd.concat(excel_dfs.values())
+    except FileNotFoundError as e:
+        print(f"Csv file not found in {file_path}")
+    return None
 
 if __name__ == "__main__":
     print(read_products_csv())
