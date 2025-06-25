@@ -30,11 +30,11 @@ def read_users_excel(file_path=f"{data_dir}/users.csv"):
         'email': 'S10'
     }
     try:
-        excel_dfs = pd.read_excel(f"{data_dir}/users.xlsx", 
+        excel_dfs = pd.read_excel(file_path, 
                                     sheet_name=[0,1],
-                                    parse_dates=[2],
+                                    parse_dates=["signup_date"],
                                     dtype=data_types)
-        return pd.concat(excel_dfs.values())
+        return pd.concat(excel_dfs.values(), ignore_index=True)
     except FileNotFoundError as e:
         print(f"Excel file not found in {file_path}")
     return None
