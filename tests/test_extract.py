@@ -35,3 +35,14 @@ class TestExtractFunctions():
             parse_dates=[3],
             dtype=self.expected_data_types
         )
+
+    @patch("etl.extract.pd.read_csv", side_effect=FileNotFoundError)
+    def test_read_products_csv_fail_file_not_found(self, mock_read_csv):
+        """Test read_products_csv response"""
+        df = read_products_csv(self.test_path)
+        mock_read_csv.assert_called_once_with(
+            self.test_path,
+            parse_dates=[3],
+            dtype=self.expected_data_types
+        )
+        assert df is None
