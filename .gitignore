@@ -1,2 +1,3 @@
 venv/
 data/input/
+__pycache__/
