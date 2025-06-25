@@ -25,12 +25,18 @@ def read_products_csv(file_path=f"{data_dir}/products.csv"):
     
 
 def read_users_excel(file_path=f"{data_dir}/users.csv"):
-    
+    data_types = {
+        'id': np.int16,
+        'email': 'S10'
+    }
     try:
-        excel_dfs = pd.read_excel(f"{data_dir}/users.xlsx", sheet_name=[0,1])
+        excel_dfs = pd.read_excel(f"{data_dir}/users.xlsx", 
+                                    sheet_name=[0,1],
+                                    parse_dates=[2],
+                                    dtype=data_types)
         return pd.concat(excel_dfs.values())
     except FileNotFoundError as e:
-        print(f"Csv file not found in {file_path}")
+        print(f"Excel file not found in {file_path}")
     return None
 
 if __name__ == "__main__":
